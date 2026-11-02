@@ -1,8 +1,8 @@
 {
-  "versionName": "1.4",
-  "versionCode": 5,
-  "fileName": "android-orbit-1.4.apk",
-  "sizeBytes": 1682416,
-  "sha256": "b99ab03e3b186bad4299079bc45fa95ce538cb72a688caeabae069f33429fbb4",
-  "builtAt": "2026-11-02T22:10:47.5272744+01:00"
+  "versionName": "1.5",
+  "versionCode": 6,
+  "fileName": "android-orbit-1.5.apk",
+  "sizeBytes": 1682552,
+  "sha256": "4ab2645cbd6b3fdccdfbbde37372cd3164043265bb3a4f8960d3f7e38d8bdc7d",
+  "builtAt": "2026-11-02T22:16:02.0268258+01:00"
 }
