@@ -1,8 +1,8 @@
 {
-  "versionName": "1.7",
-  "versionCode": 8,
-  "fileName": "android-orbit-1.7.apk",
-  "sizeBytes": 1697512,
-  "sha256": "6151c53f24d0917eb5e56a2b70f75c968210979c3c9a8eccc165adbde2116200",
-  "builtAt": "2026-11-02T22:30:43.2704287+01:00"
+  "versionName": "1.8",
+  "versionCode": 9,
+  "fileName": "android-orbit-1.8.apk",
+  "sizeBytes": 1705172,
+  "sha256": "1c8bbd48a325e7fca8640af449578d7d11473159e031348d9fdb640b1f50afc9",
+  "builtAt": "2026-11-02T23:44:58.1738851+01:00"
 }

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Android Orbit</title>
+<meta name="description" content="International privacy policy for Android Orbit: what stays on your device, what the app never collects, and why each permission is needed.">
+<style>
+  :root { --bg:#05080c; --card:#0d141b; --line:#1d2733; --text:#e8eef5; --muted:#93a1b0; --accent:#5fe3ff; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:radial-gradient(120% 80% at 80% 0%, #12212e 0%, var(--bg) 55%); color:var(--text); font:16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 48px 22px 64px; }
+  h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 30px 0 8px; }
+  p, li { color: var(--muted); }
+  ul { padding-left: 20px; }
+  li { margin: 5px 0; }
+  b, strong { color: var(--text); font-weight: 600; }
+  table { width:100%; border-collapse: collapse; margin-top: 10px; font-size: 15px; }
+  td { padding: 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--muted); }
+  td:first-child { color: var(--text); width: 30%; }
+  a { color: var(--accent); }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-top: 18px; }
+  footer { color: var(--muted); font-size: 14px; margin-top: 32px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Privacy Policy — Android Orbit</h1>
+  <p class="sub">Effective date: 2 November 2026 · Applies worldwide · Version 1.8</p>
+
+  <div class="card">
+    <p><b>The short version.</b> Android Orbit runs entirely on your device. It has no account, no
+    analytics, no advertising, and no server that stores information about you. Your app list, your
+    launch counters, your folders and your layout never leave the phone. The only network traffic is
+    the update check against this website.</p>
+  </div>
+
+  <h2>1. Who we are</h2>
+  <p>Android Orbit ("the app", "we") is a free, open launcher utility distributed as a signed APK from
+  this website and its mirror. This policy describes how the app handles information, in line with
+  the EU General Data Protection Regulation (GDPR), Google Play's user data principles, and common
+  international requirements. It is written to be readable, not to hide anything.</p>
+
+  <h2>2. What the app reads on your device</h2>
+  <table>
+    <tr><td>List of installed apps</td><td>Read through the public <code>LauncherApps</code> API so the
+      orbit can show apps you can launch. Kept in memory only.</td></tr>
+    <tr><td>App icons</td><td>Loaded through <code>LauncherApps</code> and cached in memory for the
+      duration of the overlay.</td></tr>
+    <tr><td>Usage statistics</td><td><b>Only if you grant "Usage access".</b> Read with
+      <code>UsageStatsManager</code> to sort the inner rings by how often you open apps. The result is
+      a ranking computed locally; the raw data is never copied off the device.</td></tr>
+    <tr><td>Launch counters</td><td>The app also counts launches performed from the orbit itself and
+      stores those counters in its private preferences.</td></tr>
+    <tr><td>Your settings</td><td>Icon size, ring spacing, ring rotation, folders, pinned apps,
+      calibration and the fan position are stored in the app's private storage.</td></tr>
+  </table>
+  <p>All of the above stays in the app's private data directory. Android protects it from other apps;
+  uninstalling Android Orbit deletes it.</p>
+
+  <h2>3. What the app never does</h2>
+  <ul>
+    <li>No account, sign-in, name, email, phone number or contacts.</li>
+    <li>No analytics, crash reporting, advertising SDK or profiling.</li>
+    <li>No reading of screen content, keystrokes, messages, photos or files. The accessibility mode
+      only draws a handle and reacts to touches on it — it is not a screen reader.</li>
+    <li>No upload of your app list, usage statistics, folders or layout.</li>
+    <li>No selling or sharing of data with third parties, because no data is collected.</li>
+  </ul>
+
+  <h2>4. Network traffic</h2>
+  <p>When the app starts, and when you press "Check for updates", it performs HTTPS requests to
+  <code>https://orbitmenu.lusina.net/version.json</code>. If a newer build exists, the app downloads
+  the APK from the same host and verifies its SHA-256 before handing it to the Android installer.</p>
+  <p>Those requests contain nothing but the usual HTTP information (IP address, user agent, time).
+  Like any web server, the host may keep short-lived access logs for security and abuse prevention.
+  The app does not send your device identifiers, app list, or any usage information with the request.</p>
+  <p>If you do not want any network traffic, simply do not use the in-app updater — the app works
+  fully offline otherwise.</p>
+
+  <h2>5. Permissions and why each one exists</h2>
+  <table>
+    <tr><td>Draw over other apps</td><td>Needed to display the corner handle and the orbit on top of
+      the current app. This is a display permission; the app cannot read the screen through it.</td></tr>
+    <tr><td>Usage access</td><td>Optional. Only used to rank apps for the inner rings.</td></tr>
+    <tr><td>Foreground service</td><td>Keeps the handle alive; Android requires a visible
+      notification for it.</td></tr>
+    <tr><td>Notifications</td><td>Shows that required notification (Android 13+).</td></tr>
+    <tr><td>Accessibility service</td><td>Optional alternative trigger that avoids the overlay
+      permission. It observes only touches on its own handle.</td></tr>
+    <tr><td>Internet</td><td>Update check and APK download.</td></tr>
+    <tr><td>Install unknown apps</td><td>Hands a downloaded update to the Android installer. The app
+      cannot install anything silently.</td></tr>
+  </table>
+
+  <h2>6. Legal bases (GDPR)</h2>
+  <p>Where the GDPR applies: reading your app list and drawing the overlay is necessary to perform the
+  service you asked for (Art. 6(1)(b)). Usage access is processed on the basis of your consent
+  (Art. 6(1)(a)), which you give by granting the permission and can withdraw at any time in the system
+  settings. The update check relies on our legitimate interest in delivering security fixes
+  (Art. 6(1)(f)) and can be avoided by not using the updater.</p>
+
+  <h2>7. Your rights</h2>
+  <p>Because the app does not collect personal data on a server, there is no profile to export or
+  delete remotely. You remain in full control locally: clear the app's storage or uninstall it to
+  remove everything at once. If you believe the app processes personal data anyway, you have the right
+  to ask for access, rectification, erasure, restriction, portability and objection, and to lodge a
+  complaint with your local data protection authority.</p>
+
+  <h2>8. Children</h2>
+  <p>Android Orbit is a general-purpose utility that is not directed to children and does not knowingly
+  collect information from anyone, including children under 13 (COPPA) or 16 (GDPR).</p>
+
+  <h2>9. Security</h2>
+  <p>All release APKs are signed; updates are downloaded over HTTPS and verified against the SHA-256
+  published in <code>version.json</code>. Android only installs an update signed with the same key as
+  the installed app, so a third party cannot replace it with a modified build.</p>
+
+  <h2>10. International scope</h2>
+  <p>This policy is intended to satisfy users worldwide. No personal data is transferred across
+  borders because no personal data is collected by us. Where local law grants stronger rights than
+  described above, those rights prevail.</p>
+
+  <h2>11. Changes to this policy</h2>
+  <p>Material changes will appear in the <a href="changelog.html">changelog</a> together with a new app
+  version, and the effective date above will be updated. Every app version is listed on that page, so
+  you can always see what changed and when.</p>
+
+  <h2>12. Contact</h2>
+  <p>Questions about privacy: open an issue at
+  <a href="https://github.com/ussdeveloper/android-orbit/issues">github.com/ussdeveloper/android-orbit</a>.
+  Please do not include personal data in public issues.</p>
+
+  <footer>
+    <a href="./">← Back to the download page</a> · <a href="changelog.html">Changelog</a>
+  </footer>
+</div>
+</body>
+</html>
