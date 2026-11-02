@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Android Orbit — orbita aplikacji pod kciukiem</title>
+<meta name="description" content="Android Orbit to nakładka na Androida: przeciągnij kciukiem z rogu ekranu i wybierz aplikację z obracających się pierścieni. Pobierz APK." />
+<meta name="theme-color" content="#0A0D12" />
+<style>
+  :root {
+    --bg: #0A0D12;
+    --surface: #141A22;
+    --surface-2: #1B232D;
+    --line: rgba(255, 255, 255, 0.13);
+    --accent: #5FE3FF;
+    --text: #E8EEF5;
+    --muted: #93A1B0;
+    --good: #7CF7C4;
+    --warn: #FFCF70;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 700px at 78% 78%, rgba(95, 227, 255, 0.10), transparent 62%),
+      radial-gradient(900px 600px at 10% 0%, rgba(95, 227, 255, 0.05), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
+
+  header {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(14px);
+    background: rgba(10, 13, 18, 0.78);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; gap: 14px; height: 62px; }
+  .brand { display: flex; align-items: center; gap: 11px; font-weight: 650; letter-spacing: .2px; }
+  .brand span { font-size: 17px; }
+  .nav nav { margin-left: auto; display: flex; gap: 20px; font-size: 14px; }
+  .nav nav a { color: var(--muted); }
+  .nav nav a:hover { color: var(--text); text-decoration: none; }
+  @media (max-width: 680px) { .nav nav { display: none; } }
+
+  .hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 46px; align-items: center; padding: 64px 0 40px; }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 40px; } }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); background: rgba(95, 227, 255, 0.10);
+    border: 1px solid rgba(95, 227, 255, 0.28);
+    padding: 6px 12px; border-radius: 999px;
+  }
+  h1 { font-size: clamp(34px, 5.4vw, 54px); line-height: 1.05; margin: 18px 0 14px; letter-spacing: -0.02em; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lede { color: var(--muted); font-size: 17px; max-width: 46ch; margin: 0 0 26px; }
+
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent); color: #041016;
+    font-weight: 650; font-size: 16px;
+    padding: 14px 24px; border-radius: 14px; border: 0;
+    box-shadow: 0 10px 30px rgba(95, 227, 255, 0.24);
+    transition: transform .16s ease, box-shadow .16s ease;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 36px rgba(95, 227, 255, 0.32); text-decoration: none; }
+  .btn.secondary {
+    background: var(--surface-2); color: var(--text); border: 1px solid var(--line); box-shadow: none;
+  }
+  .btn.secondary:hover { border-color: rgba(95, 227, 255, 0.4); }
+
+  .meta { margin-top: 18px; color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  .meta b { color: var(--text); font-weight: 600; }
+
+  .phone {
+    position: relative; justify-self: center;
+    width: 300px; max-width: 78vw; aspect-ratio: 1080 / 2400;
+    border-radius: 34px; padding: 10px;
+    background: linear-gradient(180deg, #232C38, #10161d);
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 90px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  }
+  .phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 26px; display: block; }
+
+  section { padding: 54px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 26px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 30px; max-width: 60ch; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012));
+    border: 1px solid var(--line); border-radius: 18px; padding: 20px;
+  }
+  .card h3 { margin: 0 0 6px; font-size: 16px; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; }
+  .dot {
+    width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center;
+    background: rgba(95, 227, 255, 0.12); border: 1px solid rgba(95, 227, 255, 0.3);
+    color: var(--accent); font-size: 16px; margin-bottom: 12px;
+  }
+
+  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; max-width: 780px; }
+  ol.steps li {
+    counter-increment: s; position: relative; padding: 16px 18px 16px 58px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px; font-size: 15px;
+  }
+  ol.steps li::before {
+    content: counter(s); position: absolute; left: 16px; top: 15px;
+    width: 27px; height: 27px; border-radius: 9px; display: grid; place-items: center;
+    background: rgba(95, 227, 255, 0.14); color: var(--accent);
+    font-size: 13px; font-weight: 700; border: 1px solid rgba(95, 227, 255, 0.3);
+  }
+  ol.steps b { color: var(--text); }
+
+  table.file { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.file td { padding: 11px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.file td:first-child { color: var(--muted); width: 190px; }
+  code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; word-break: break-all; }
+
+  details {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 18px; margin-bottom: 10px;
+  }
+  details summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+  details p { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+
+  .note {
+    border-left: 3px solid var(--warn); background: rgba(255, 207, 112, 0.07);
+    padding: 14px 18px; border-radius: 0 12px 12px 0; color: #E7D6B4; font-size: 14px;
+  }
+  .note.good { border-color: var(--good); background: rgba(124, 247, 196, 0.07); color: #CDF6E6; }
+
+  footer { padding: 34px 0 60px; color: var(--muted); font-size: 13px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="3" fill="#5FE3FF"/>
+        <circle cx="12" cy="12" r="6" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="0.9"/>
+        <circle cx="12" cy="12" r="9.4" fill="none" stroke="rgba(95,227,255,0.75)" stroke-width="1.1"/>
+        <circle cx="20.4" cy="12" r="1.5" fill="#fff"/>
+        <circle cx="7.1" cy="5.6" r="1.3" fill="#fff"/>
+      </svg>
+      <span>Android Orbit</span>
+    </div>
+    <nav>
+      <a href="#funkcje">Funkcje</a>
+      <a href="#instalacja">Instalacja</a>
+      <a href="#plik">Plik</a>
+      <a href="#pytania">Pytania</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div>
+      <span class="eyebrow">Wersja 1.0 · APK</span>
+      <h1>Twoje aplikacje<br /><em>pod kciukiem</em></h1>
+      <p class="lede">
+        Nakładka systemowa na Androida. Przeciągnij po przekątnej z prawego dolnego rogu —
+        otworzy się orbita z trzema obracającymi się pierścieniami ikon. Bez szukania po szufladach.
+      </p>
+      <div class="cta">
+        <a class="btn" href="android-orbit-1.0.apk" download>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>
+          </svg>
+          Pobierz APK · 1,6 MB
+        </a>
+        <a class="btn secondary" href="#instalacja">Jak zainstalować</a>
+      </div>
+      <div class="meta">
+        <span>Android <b>8.0+</b></span>
+        <span>Wersja <b>1.0</b></span>
+        <span>Bez reklam i śledzenia</span>
+        <span>Bez internetu</span>
+      </div>
+    </div>
+    <div class="phone">
+      <img src="screenshot.png" alt="Orbita z trzema pierścieniami ikon na ekranie głównym" />
+    </div>
+  </div>
+
+  <section id="funkcje">
+    <h2>Co robi</h2>
+    <p class="sub">Wachlarz pierścieni zaprojektowany pod obsługę jedną ręką — wszystko w zasięgu kciuka.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="dot">↖</div>
+        <h3>Gest po przekątnej</h3>
+        <p>Przeciągnięcie z uchwytu w prawym dolnym rogu otwiera orbitę. Tapnięcie uchwytu też działa.</p>
+      </div>
+      <div class="card">
+        <div class="dot">◎</div>
+        <h3>Trzy pierścienie</h3>
+        <p>Wewnętrzny to najczęściej używane aplikacje, środkowy kolejne, a zewnętrzny pełny alfabetyczny indeks.</p>
+      </div>
+      <div class="card">
+        <div class="dot">⟳</div>
+        <h3>Pęd ruletki</h3>
+        <p>Szarpnij pierścień — kręci się dalej, wyhamowuje tarciem i ląduje równo na slocie. Haptyk tyka przy każdej ikonie.</p>
+      </div>
+      <div class="card">
+        <div class="dot">𝒾</div>
+        <h3>Kalibracja kciuka</h3>
+        <p>Kreator mierzy, gdzie realnie sięgasz, i dopasowuje promienie pierścieni, łuk oraz rozmiar ikon.</p>
+      </div>
+      <div class="card">
+        <div class="dot">◐</div>
+        <h3>Ciemna otoczka</h3>
+        <p>Pod orbitą pojawia się ciemny krąg, więc ikony są czytelne nawet na jasnej tapiecie.</p>
+      </div>
+      <div class="card">
+        <div class="dot">⚙</div>
+        <h3>Dwa tryby</h3>
+        <p>Nakładka (rysowanie nad aplikacjami) albo usługa dostępności — bez uprawnienia nakładki.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="instalacja">
+    <h2>Instalacja</h2>
+    <p class="sub">Aplikacja nie jest w Google Play — instalujesz plik APK bezpośrednio.</p>
+    <ol class="steps">
+      <li>Pobierz plik <b>android-orbit-1.0.apk</b> na telefon (albo pobierz na komputer i prześlij).</li>
+      <li>Otwórz plik. System zapyta o zgodę na instalację z tego źródła — <b>zezwól</b> (Ustawienia → Aplikacje → Specjalny dostęp → Instalowanie nieznanych aplikacji).</li>
+      <li>Uruchom <b>Android Orbit</b> i przyznaj <b>rysowanie nad innymi aplikacjami</b>. Opcjonalnie: statystyki użycia i powiadomienia.</li>
+      <li>Naciśnij <b>Uruchom orbitę</b>, wróć na ekran główny i przeciągnij po przekątnej z prawego dolnego rogu.</li>
+      <li>Dla lepszego dopasowania wejdź w <b>Kalibracja kciuka</b> i przejedź kciukiem po każdym pierścieniu.</li>
+    </ol>
+    <p class="note" style="margin-top:22px">
+      Niektóre telefony (Xiaomi, Huawei, Samsung, Oppo) dodatkowo wymagają włączenia autostartu
+      i wyłączenia optymalizacji baterii dla tej aplikacji — inaczej usługa może zostać zatrzymana w tle.
+    </p>
+  </section>
+
+  <section id="plik">
+    <h2>Plik do pobrania</h2>
+    <p class="sub">Sprawdź sumę kontrolną, jeśli chcesz mieć pewność, że plik dotarł w całości.</p>
+    <table class="file">
+      <tr><td>Plik</td><td><a href="android-orbit-1.0.apk" download>android-orbit-1.0.apk</a></td></tr>
+      <tr><td>Wersja</td><td>1.0 (versionCode 1)</td></tr>
+      <tr><td>Rozmiar</td><td>1 653 256 bajtów</td></tr>
+      <tr><td>Wymagania</td><td>Android 8.0 (API 26) lub nowszy · target API 35</td></tr>
+      <tr><td>Podpis</td><td>SHA-256 certyfikatu<br /><code>21541970a8eb0d8d76d822379b5cb6e2094e9593fb60a02c39f232e9d83593ae</code></td></tr>
+      <tr><td>SHA-256 pliku</td><td><code>B0F269C3338B07CFB1DB519D640BA5EB47E66CB6F2190C818C39FE9BA5F65BB3</code></td></tr>
+    </table>
+    <p class="note good" style="margin-top:22px">
+      Uprawnienia: nakładka (wyświetlanie nad innymi aplikacjami), opcjonalnie statystyki użycia
+      i powiadomienia. Aplikacja nie ma uprawnienia do internetu — nie wysyła żadnych danych.
+    </p>
+  </section>
+
+  <section id="pytania">
+    <h2>Pytania</h2>
+    <div style="max-width:820px">
+      <details>
+        <summary>Czy to działa bez roota?</summary>
+        <p>Tak. Wystarczy zwykłe uprawnienie „rysowanie nad innymi aplikacjami” albo usługa dostępności.</p>
+      </details>
+      <details>
+        <summary>Dlaczego gest startuje z uchwytu, a nie z dowolnego miejsca ekranu?</summary>
+        <p>Android nie pozwala nakładkom nasłuchiwać dotknięć w całym systemie — przechwyciłoby to też dotknięcia w aplikacjach. Uchwyt przy krawędzi jest kompromisem: pewny, tani i nie koliduje z gestami systemowymi.</p>
+      </details>
+      <details>
+        <summary>Czy zbiera dane?</summary>
+        <p>Nie. Lista aplikacji, statystyki użycia i ustawienia zostają na urządzeniu. Brak dostępu do internetu.</p>
+      </details>
+      <details>
+        <summary>Jak zaktualizować do nowszej wersji?</summary>
+        <p>Zainstaluj nowszy APK na wierzch — podpis jest ten sam, więc dane i ustawienia zostaną zachowane.</p>
+      </details>
+      <details>
+        <summary>Ikony w środku i na zewnątrz się powtarzają — czy tak ma być?</summary>
+        <p>Tak: wewnętrzne pierścienie to skróty do najczęściej używanych aplikacji, a zewnętrzny to pełny indeks. W ustawieniach możesz wyłączyć opcję „Zewnętrzny pierścień: wszystkie aplikacje”.</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Android Orbit 1.0 · zbudowane dla Androida 8.0+</span>
+    <span>Podpisany APK · <a href="android-orbit-1.0.apk" download>pobierz ponownie</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
